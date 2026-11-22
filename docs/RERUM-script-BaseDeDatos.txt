@@ -1,0 +1,752 @@
+drop index ADMINISTRACION_PK;
+
+drop table ADMINISTRACION;
+
+drop index AREA_PROV_PK;
+
+drop table AREA_PROV;
+
+drop index AREA_TRABAJO_PK;
+
+drop table AREA_TRABAJO;
+
+drop index RELATIONSHIP_21_FK2;
+
+drop index RELATIONSHIP_19_FK;
+
+drop index BAJA_PK;
+
+drop table BAJA;
+
+drop index CATEGORIA_AREA_PK;
+
+drop table CATEGORIA_AREA;
+
+drop index RELATIONSHIP_12_FK;
+
+drop index RELATIONSHIP_11_FK;
+
+drop index COMPRA_PK;
+
+drop table COMPRA;
+
+drop index RELATIONSHIP_21_FK;
+
+drop index RELATIONSHIP_14_FK;
+
+drop index DETALLE_COMPRA_PK;
+
+drop table DETALLE_COMPRA;
+
+drop index ESTADO_PRESTAMO_PK;
+
+drop table ESTADO_PRESTAMO;
+
+drop index RELATIONSHIP_8_FK;
+
+drop index FECHA_PK;
+
+drop table FECHA;
+
+drop index MEDIDA_PK;
+
+drop table MEDIDA;
+
+drop index RELATIONSHIP_10_FK;
+
+drop index RELATIONSHIP_9_FK;
+
+drop table MEDI_D_PROD;
+
+drop index RELATIONSHIP_15_FK;
+
+drop index RELATIONSHIP_13_FK;
+
+drop index MOVIMIENTO_PK;
+
+drop table MOVIMIENTO;
+
+drop index RELATIONSHIP_18_FK;
+
+drop index RELATIONSHIP_4_FK;
+
+drop index RELATIONSHIP_3_FK;
+
+drop index PRESTAMO_PK;
+
+drop table PRESTAMO;
+
+drop index RELATIONSHIP_6_FK;
+
+drop index RELATIONSHIP_5_FK;
+
+drop table PREST_D_PRODUC;
+
+drop index RELATIONSHIP_20_FK;
+
+drop index PROD_TIENE_CAT_FK;
+
+drop index PRODUCTO_PK;
+
+drop table PRODUCTO;
+
+drop index RELATIONSHIP_22_FK;
+
+drop index PROVEEDOR_PK;
+
+drop table PROVEEDOR;
+
+drop index RELATIONSHIP_17_FK;
+
+drop index RELATIONSHIP_16_FK;
+
+drop table SAL_D_PROD;
+
+drop table TALLA;
+
+drop table TALLA_PRODUCTO;
+
+drop index TRAB_TIENE_AREA_FK;
+
+drop index TRABAJADORES_PK;
+
+drop table TRABAJADORES;
+
+/*==============================================================*/
+/* Table: ADMINISTRACION                                        */
+/*==============================================================*/
+create table ADMINISTRACION (
+   ID_ADMIN             INT4                 not null,
+   CEDULA               VARCHAR(13)          not null,
+   NOMBRES_ADMIN        VARCHAR(100)         not null,
+   TELEFONO_ADMIN       VARCHAR(10)          not null,
+   CARGO                VARCHAR(50)          not null,
+   ROL_DB               VARCHAR(50)          null,
+   USERNAME             VARCHAR(50)          null,
+   PASSWORD_HASH        VARCHAR(255)         not null,
+   ESTADO_ADMIN         BOOLEAN              null,
+   constraint PK_ADMINISTRACION primary key (ID_ADMIN),
+   constraint AK_KEY_2_ADMINIST unique (CEDULA),
+   constraint AK_KEY_3_ADMINIST unique (USERNAME)
+);
+
+/*==============================================================*/
+/* Index: ADMINISTRACION_PK                                     */
+/*==============================================================*/
+create unique index ADMINISTRACION_PK on ADMINISTRACION (
+ID_ADMIN
+);
+
+/*==============================================================*/
+/* Table: AREA_PROV                                             */
+/*==============================================================*/
+create table AREA_PROV (
+   ID_AREA_PROV         INT4                 not null,
+   AREA_PROV_NOMBRE     VARCHAR(60)          not null,
+   constraint PK_AREA_PROV primary key (ID_AREA_PROV)
+);
+
+/*==============================================================*/
+/* Index: AREA_PROV_PK                                          */
+/*==============================================================*/
+create unique index AREA_PROV_PK on AREA_PROV (
+ID_AREA_PROV
+);
+
+/*==============================================================*/
+/* Table: AREA_TRABAJO                                          */
+/*==============================================================*/
+create table AREA_TRABAJO (
+   ID_AREA_TRAB         INT4                 not null,
+   AREA_TRAB_NOMBRE     VARCHAR(50)          not null,
+   constraint PK_AREA_TRABAJO primary key (ID_AREA_TRAB)
+);
+
+/*==============================================================*/
+/* Index: AREA_TRABAJO_PK                                       */
+/*==============================================================*/
+create unique index AREA_TRABAJO_PK on AREA_TRABAJO (
+ID_AREA_TRAB
+);
+
+/*==============================================================*/
+/* Table: BAJA                                                  */
+/*==============================================================*/
+create table BAJA (
+   ID_BAJA              INT                  not null,
+   ID_ADMIN             INT4                 not null,
+   CODIGO_BARRAS        VARCHAR(50)          not null,
+   MOTIVO               VARCHAR(100)         null,
+   JUSTIFICACION        TEXT                 null,
+   FECHA_BAJA           DATE                 not null,
+   constraint PK_BAJA primary key (ID_BAJA)
+);
+
+/*==============================================================*/
+/* Index: BAJA_PK                                               */
+/*==============================================================*/
+create unique index BAJA_PK on BAJA (
+ID_BAJA
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_19_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_19_FK on BAJA (
+ID_ADMIN
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_21_FK2                                   */
+/*==============================================================*/
+create  index RELATIONSHIP_21_FK2 on BAJA (
+CODIGO_BARRAS
+);
+
+/*==============================================================*/
+/* Table: CATEGORIA_AREA                                        */
+/*==============================================================*/
+create table CATEGORIA_AREA (
+   ID_CATEGORIA         INT                  not null,
+   NOMBRE_AREA          VARCHAR(100)         not null,
+   constraint PK_CATEGORIA_AREA primary key (ID_CATEGORIA)
+);
+
+/*==============================================================*/
+/* Index: CATEGORIA_AREA_PK                                     */
+/*==============================================================*/
+create unique index CATEGORIA_AREA_PK on CATEGORIA_AREA (
+ID_CATEGORIA
+);
+
+/*==============================================================*/
+/* Table: COMPRA                                                */
+/*==============================================================*/
+create table COMPRA (
+   ID_COMPRA            INT4                 not null,
+   ID_ADMIN             INT4                 not null,
+   ID_PROVEEDOR         INT4                 not null,
+   COMP_MONTO           DECIMAL(10,2)        not null,
+   FECHA                DATE                 not null,
+   constraint PK_COMPRA primary key (ID_COMPRA)
+);
+
+/*==============================================================*/
+/* Index: COMPRA_PK                                             */
+/*==============================================================*/
+create unique index COMPRA_PK on COMPRA (
+ID_COMPRA
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_11_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_11_FK on COMPRA (
+ID_ADMIN
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_12_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_12_FK on COMPRA (
+ID_PROVEEDOR
+);
+
+/*==============================================================*/
+/* Table: DETALLE_COMPRA                                        */
+/*==============================================================*/
+create table DETALLE_COMPRA (
+   ID_DETALLE           INT                  not null,
+   CODIGO_BARRAS        VARCHAR(50)          not null,
+   ID_COMPRA            INT4                 not null,
+   DET_COMP_CANTIDAD    DECIMAL(10,2)        not null
+      constraint CKC_DET_COMP_CANTIDAD_DETALLE_ check (DET_COMP_CANTIDAD >= 0),
+   PRECIO_UNITARIO      DECIMAL(10,2)        not null
+      constraint CKC_PRECIO_UNITARIO_DETALLE_ check (PRECIO_UNITARIO >= 0),
+   DET_COMP_MONTO       DECIMAL(10,2)        not null
+      constraint CKC_DET_COMP_MONTO_DETALLE_ check (DET_COMP_MONTO >= 0),
+   constraint PK_DETALLE_COMPRA primary key (ID_DETALLE)
+);
+
+/*==============================================================*/
+/* Index: DETALLE_COMPRA_PK                                     */
+/*==============================================================*/
+create unique index DETALLE_COMPRA_PK on DETALLE_COMPRA (
+ID_DETALLE
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_14_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_14_FK on DETALLE_COMPRA (
+CODIGO_BARRAS
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_21_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_21_FK on DETALLE_COMPRA (
+ID_COMPRA
+);
+
+/*==============================================================*/
+/* Table: ESTADO_PRESTAMO                                       */
+/*==============================================================*/
+create table ESTADO_PRESTAMO (
+   ID_ESTADO            INT4                 not null,
+   ES_PRES_DESC         VARCHAR(50)          not null,
+   constraint PK_ESTADO_PRESTAMO primary key (ID_ESTADO)
+);
+
+comment on table ESTADO_PRESTAMO is
+'estado del prestamos puede ser pendiente, finalizado, atrasado';
+
+/*==============================================================*/
+/* Index: ESTADO_PRESTAMO_PK                                    */
+/*==============================================================*/
+create unique index ESTADO_PRESTAMO_PK on ESTADO_PRESTAMO (
+ID_ESTADO
+);
+
+/*==============================================================*/
+/* Table: FECHA                                                 */
+/*==============================================================*/
+create table FECHA (
+   ID_FECHA             INT4                 not null,
+   CODIGO_BARRAS        VARCHAR(50)          not null,
+   ADQUISICION          DATE                 not null,
+   FABRICACION          DATE                 null,
+   CADUCIDAD            DATE                 null,
+   constraint PK_FECHA primary key (ID_FECHA)
+);
+
+/*==============================================================*/
+/* Index: FECHA_PK                                              */
+/*==============================================================*/
+create unique index FECHA_PK on FECHA (
+ID_FECHA
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_8_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_8_FK on FECHA (
+CODIGO_BARRAS
+);
+
+/*==============================================================*/
+/* Table: MEDIDA                                                */
+/*==============================================================*/
+create table MEDIDA (
+   ID_UNIDAD            INT4                 not null,
+   MED_NOMBRE           VARCHAR(50)          not null,
+   constraint PK_MEDIDA primary key (ID_UNIDAD)
+);
+
+comment on table MEDIDA is
+'SON LAS UNIDADES, LITROS, KG, G, PAQUETES, REZMAS, ETC...
+';
+
+/*==============================================================*/
+/* Index: MEDIDA_PK                                             */
+/*==============================================================*/
+create unique index MEDIDA_PK on MEDIDA (
+ID_UNIDAD
+);
+
+/*==============================================================*/
+/* Table: MEDI_D_PROD                                           */
+/*==============================================================*/
+create table MEDI_D_PROD (
+   ID_UNIDAD            INT4                 not null,
+   CODIGO_BARRAS        VARCHAR(50)          not null
+);
+
+comment on table MEDI_D_PROD is
+'MEDIDAS DEL PRODUCTO, TABLA INTERSECCION CON LAS MEDIDAS QUE PUEDE LLEGAR A TENER UN PRODUCTO, UN PAQUETE DE HOJAS, LA UNIDAD, LOS LITROS,ETC....';
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_9_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_9_FK on MEDI_D_PROD (
+CODIGO_BARRAS
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_10_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_10_FK on MEDI_D_PROD (
+ID_UNIDAD
+);
+
+/*==============================================================*/
+/* Table: MOVIMIENTO                                            */
+/*==============================================================*/
+create table MOVIMIENTO (
+   ID_MOVIMIENTO        INT                  not null,
+   ID_ADMIN             INT4                 not null,
+   ID_TRABAJADOR        INT                  not null,
+   MOV_CANTIDAD         DECIMAL(10,2)        not null,
+   FECHA_HORA           DATE                 not null,
+   constraint PK_MOVIMIENTO primary key (ID_MOVIMIENTO)
+);
+
+comment on table MOVIMIENTO is
+'Los movimientos son las salidas de productos consumibles, la lógica del negocio nos dice que una vez un consumible sale, no vuelve a ser reingresado, no existen casos por ejemplo donde un litro de desinfectante vuelva al ingreso';
+
+/*==============================================================*/
+/* Index: MOVIMIENTO_PK                                         */
+/*==============================================================*/
+create unique index MOVIMIENTO_PK on MOVIMIENTO (
+ID_MOVIMIENTO
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_13_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_13_FK on MOVIMIENTO (
+ID_ADMIN
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_15_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_15_FK on MOVIMIENTO (
+ID_TRABAJADOR
+);
+
+/*==============================================================*/
+/* Table: PRESTAMO                                              */
+/*==============================================================*/
+create table PRESTAMO (
+   ID_PRESTAMO          INT4                 not null,
+   ID_TRABAJADOR        INT                  not null,
+   ID_ADMIN             INT4                 not null,
+   ID_ESTADO            INT4                 not null,
+   FECHA_HORA_SALIDA    DATE                 null,
+   FECHA_HORA_LIMITE    DATE                 null,
+   FECHA_HORA_DEVOLUCION DATE                 null,
+   ESTADO_PRESTAMO      VARCHAR(50)          null,
+   constraint PK_PRESTAMO primary key (ID_PRESTAMO)
+);
+
+comment on table PRESTAMO is
+'Los prestamos son los movimientos de los activos fisicos, mesas, sillas, podadoras, etc.. los prestamos no pueden ser de consumibles, tienen una fecha maxima de entrega, una fecha de salida y un estado en el que se encuentra';
+
+/*==============================================================*/
+/* Index: PRESTAMO_PK                                           */
+/*==============================================================*/
+create unique index PRESTAMO_PK on PRESTAMO (
+ID_PRESTAMO
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_3_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_3_FK on PRESTAMO (
+ID_TRABAJADOR
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_4_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_4_FK on PRESTAMO (
+ID_ADMIN
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_18_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_18_FK on PRESTAMO (
+ID_ESTADO
+);
+
+/*==============================================================*/
+/* Table: PREST_D_PRODUC                                        */
+/*==============================================================*/
+create table PREST_D_PRODUC (
+   ID_PRESTAMO          INT4                 not null,
+   CODIGO_BARRAS        VARCHAR(50)          not null
+);
+
+comment on table PREST_D_PRODUC is
+'TABLA INTERMEDIA QUE JUNTA LOS PRODUCTOS QUE SE HICIERON DENTRO DEL PRESTAMO';
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_5_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_5_FK on PREST_D_PRODUC (
+ID_PRESTAMO
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_6_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_6_FK on PREST_D_PRODUC (
+CODIGO_BARRAS
+);
+
+/*==============================================================*/
+/* Table: PRODUCTO                                              */
+/*==============================================================*/
+create table PRODUCTO (
+   CODIGO_BARRAS        VARCHAR(50)          not null,
+   ID_CATEGORIA         INT                  not null,
+   PROD_NOMBRE          VARCHAR(300)         not null,
+   TIPO                 BOOL                 not null,
+   MARCA                VARCHAR(50)          null,
+   MODELO               VARCHAR(50)          null,
+   SERIE                VARCHAR(50)          null,
+   CANTIDAD_ACTUAL      DECIMAL(10,2)        not null
+      constraint CKC_CANTIDAD_ACTUAL_PRODUCTO check (CANTIDAD_ACTUAL >= 0),
+   STOCK_MINIMO         DECIMAL(10,2)        not null
+      constraint CKC_STOCK_MINIMO_PRODUCTO check (STOCK_MINIMO >= 0),
+   ESTADO_OPERATIVO     VARCHAR(50)          null,
+   IMAGEN               CHAR(254)            null,
+   constraint PK_PRODUCTO primary key (CODIGO_BARRAS)
+);
+
+comment on column PRODUCTO.TIPO is
+'CONSUMIBLE / NO CONSUMIBLE';
+
+/*==============================================================*/
+/* Index: PRODUCTO_PK                                           */
+/*==============================================================*/
+create unique index PRODUCTO_PK on PRODUCTO (
+CODIGO_BARRAS
+);
+
+/*==============================================================*/
+/* Index: PROD_TIENE_CAT_FK                                     */
+/*==============================================================*/
+create  index PROD_TIENE_CAT_FK on PRODUCTO (
+ID_CATEGORIA
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_20_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_20_FK on PRODUCTO (
+
+);
+
+/*==============================================================*/
+/* Table: PROVEEDOR                                             */
+/*==============================================================*/
+create table PROVEEDOR (
+   ID_PROVEEDOR         INT4                 not null,
+   ID_AREA_PROV         INT4                 not null,
+   CODIGO_PROVEEDOR     VARCHAR(13)          not null,
+   PROV_NOMBRE          VARCHAR(100)         not null,
+   PROV_TELEFONO        VARCHAR(20)          not null,
+   CORREO_CONTACTO      VARCHAR(100)         null,
+   DESCRIPCION          TEXT                 null,
+   constraint PK_PROVEEDOR primary key (ID_PROVEEDOR)
+);
+
+/*==============================================================*/
+/* Index: PROVEEDOR_PK                                          */
+/*==============================================================*/
+create unique index PROVEEDOR_PK on PROVEEDOR (
+ID_PROVEEDOR
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_22_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_22_FK on PROVEEDOR (
+ID_AREA_PROV
+);
+
+/*==============================================================*/
+/* Table: SAL_D_PROD                                            */
+/*==============================================================*/
+create table SAL_D_PROD (
+   ID_MOVIMIENTO        INT                  not null,
+   CODIGO_BARRAS        VARCHAR(50)          not null
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_16_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_16_FK on SAL_D_PROD (
+ID_MOVIMIENTO
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_17_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_17_FK on SAL_D_PROD (
+CODIGO_BARRAS
+);
+
+/*==============================================================*/
+/* Table: TALLA                                                 */
+/*==============================================================*/
+create table TALLA (
+   ID_TALLA             INT4                 not null,
+   TALLA_NOMBRE         VARCHAR(40)          not null,
+   constraint PK_TALLA primary key (ID_TALLA)
+);
+
+comment on table TALLA is
+'CIERTOS PRODUCTOS COMO LOS GUANTES TIENEN TALLAS 30,42,ETC... AQUI SE ALMACENAN LAS TALLAS';
+
+/*==============================================================*/
+/* Table: TALLA_PRODUCTO                                        */
+/*==============================================================*/
+create table TALLA_PRODUCTO (
+   ID_TALLA             INT4                 null,
+   CODIGO_BARRAS        VARCHAR(50)          null,
+   CANTIDAD_TALLA       INT4                 not null
+);
+
+comment on table TALLA_PRODUCTO is
+'TABLA INTERSECCION ENTRE LAS TALLAS Y LOS PRODUCTOS DE DICHA TABLA, ESTA TABLA SE USA PARA PODER TENER UN MISMO PRODUCTOS, CON DIFERENTES TALLAS, SIN NECESIDAD DE TENER UN CODIGO PARA POR EJEMPLO GUANTES 32 Y OTRO CODIGO PARA GUANTES TALLA 40, TODOS TIENEN EL MISMO CODIGO PRODUCTO
+';
+
+/*==============================================================*/
+/* Table: TRABAJADORES                                          */
+/*==============================================================*/
+create table TRABAJADORES (
+   ID_TRABAJADOR        INT                  not null,
+   ID_AREA_TRAB         INT4                 not null,
+   IDENTIFICACION       VARCHAR(20)          not null,
+   TRAB_NOMBRES         VARCHAR(200)         not null,
+   CONTACTO             VARCHAR(100)         not null,
+   TRAB_ESTADO          BOOLEAN              not null,
+   constraint PK_TRABAJADORES primary key (ID_TRABAJADOR),
+   constraint AK_KEY_2_TRABAJAD unique (IDENTIFICACION)
+);
+
+comment on table TRABAJADORES is
+'Son las personas que pueden hacer prestamos (no consumibles) y movimientos (consumibles) por las reglas del negocio se asume que solamente aquellas personas que trabajan para la institución pueden hacer prestamos.';
+
+/*==============================================================*/
+/* Index: TRABAJADORES_PK                                       */
+/*==============================================================*/
+create unique index TRABAJADORES_PK on TRABAJADORES (
+ID_TRABAJADOR
+);
+
+/*==============================================================*/
+/* Index: TRAB_TIENE_AREA_FK                                    */
+/*==============================================================*/
+create  index TRAB_TIENE_AREA_FK on TRABAJADORES (
+ID_AREA_TRAB
+);
+
+alter table BAJA
+   add constraint FK_BAJA_RELATIONS_ADMINIST foreign key (ID_ADMIN)
+      references ADMINISTRACION (ID_ADMIN)
+      on delete restrict on update restrict;
+
+alter table BAJA
+   add constraint FK_BAJA_RELATIONS_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
+      on delete restrict on update restrict;
+
+alter table COMPRA
+   add constraint FK_COMPRA_RELATIONS_ADMINIST foreign key (ID_ADMIN)
+      references ADMINISTRACION (ID_ADMIN)
+      on delete restrict on update restrict;
+
+alter table COMPRA
+   add constraint FK_COMPRA_RELATIONS_PROVEEDO foreign key (ID_PROVEEDOR)
+      references PROVEEDOR (ID_PROVEEDOR)
+      on delete restrict on update restrict;
+
+alter table DETALLE_COMPRA
+   add constraint FK_DETALLE__RELATIONS_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
+      on delete restrict on update restrict;
+
+alter table DETALLE_COMPRA
+   add constraint FK_DETALLE__RELATIONS_COMPRA foreign key (ID_COMPRA)
+      references COMPRA (ID_COMPRA)
+      on delete restrict on update restrict;
+
+alter table FECHA
+   add constraint FK_FECHA_RELATIONS_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
+      on delete restrict on update restrict;
+
+alter table MEDI_D_PROD
+   add constraint FK_MEDI_D_P_RELATIONS_MEDIDA foreign key (ID_UNIDAD)
+      references MEDIDA (ID_UNIDAD)
+      on delete restrict on update restrict;
+
+alter table MEDI_D_PROD
+   add constraint FK_MEDI_D_P_RELATIONS_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
+      on delete restrict on update restrict;
+
+alter table MOVIMIENTO
+   add constraint FK_MOVIMIEN_RELATIONS_ADMINIST foreign key (ID_ADMIN)
+      references ADMINISTRACION (ID_ADMIN)
+      on delete restrict on update restrict;
+
+alter table MOVIMIENTO
+   add constraint FK_MOVIMIEN_RELATIONS_TRABAJAD foreign key (ID_TRABAJADOR)
+      references TRABAJADORES (ID_TRABAJADOR)
+      on delete restrict on update restrict;
+
+alter table PRESTAMO
+   add constraint FK_PRESTAMO_RELATIONS_ESTADO_P foreign key (ID_ESTADO)
+      references ESTADO_PRESTAMO (ID_ESTADO)
+      on delete restrict on update restrict;
+
+alter table PRESTAMO
+   add constraint FK_PRESTAMO_RELATIONS_TRABAJAD foreign key (ID_TRABAJADOR)
+      references TRABAJADORES (ID_TRABAJADOR)
+      on delete restrict on update restrict;
+
+alter table PRESTAMO
+   add constraint FK_PRESTAMO_RELATIONS_ADMINIST foreign key (ID_ADMIN)
+      references ADMINISTRACION (ID_ADMIN)
+      on delete restrict on update restrict;
+
+alter table PREST_D_PRODUC
+   add constraint FK_PREST_D__RELATIONS_PRESTAMO foreign key (ID_PRESTAMO)
+      references PRESTAMO (ID_PRESTAMO)
+      on delete restrict on update restrict;
+
+alter table PREST_D_PRODUC
+   add constraint FK_PREST_D__RELATIONS_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
+      on delete restrict on update restrict;
+
+alter table PRODUCTO
+   add constraint FK_PRODUCTO_PROD_TIEN_CATEGORI foreign key (ID_CATEGORIA)
+      references CATEGORIA_AREA (ID_CATEGORIA)
+      on delete restrict on update restrict;
+
+alter table PROVEEDOR
+   add constraint FK_PROVEEDO_RELATIONS_AREA_PRO foreign key (ID_AREA_PROV)
+      references AREA_PROV (ID_AREA_PROV)
+      on delete restrict on update restrict;
+
+alter table SAL_D_PROD
+   add constraint FK_SAL_D_PR_RELATIONS_MOVIMIEN foreign key (ID_MOVIMIENTO)
+      references MOVIMIENTO (ID_MOVIMIENTO)
+      on delete restrict on update restrict;
+
+alter table SAL_D_PROD
+   add constraint FK_SAL_D_PR_RELATIONS_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
+      on delete restrict on update restrict;
+
+alter table TALLA_PRODUCTO
+   add constraint FK_TALLA_PR_REFERENCE_TALLA foreign key (ID_TALLA)
+      references TALLA (ID_TALLA)
+      on delete restrict on update restrict;
+
+alter table TALLA_PRODUCTO
+   add constraint FK_TALLA_PR_REFERENCE_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
+      on delete restrict on update restrict;
+
+alter table TRABAJADORES
+   add constraint FK_TRABAJAD_TRAB_TIEN_AREA_TRA foreign key (ID_AREA_TRAB)
+      references AREA_TRABAJO (ID_AREA_TRAB)
+      on delete restrict on update restrict;
