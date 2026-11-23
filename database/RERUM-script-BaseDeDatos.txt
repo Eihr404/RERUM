@@ -90,6 +90,8 @@ drop index PRODUCTO_PK;
 
 drop table PRODUCTO;
 
+drop table PRODU_COD_PROV;
+
 drop index RELATIONSHIP_22_FK;
 
 drop index PROVEEDOR_PK;
@@ -228,8 +230,19 @@ create table COMPRA (
    ID_PROVEEDOR         INT4                 not null,
    COMP_MONTO           DECIMAL(10,2)        not null,
    FECHA                DATE                 not null,
+   ID_AUTORIZA          INT4                 not null,
    constraint PK_COMPRA primary key (ID_COMPRA)
 );
+
+comment on table COMPRA is
+'Forma de ingresar productos, todos se hacer por medio de una compra';
+
+comment on column COMPRA.ID_ADMIN is
+'persona que recibió los productos';
+
+comment on column COMPRA.ID_AUTORIZA is
+'persona que autorizo la compra de los productos, usaría los id disponibles de administración
+';
 
 /*==============================================================*/
 /* Index: COMPRA_PK                                             */
@@ -257,8 +270,8 @@ ID_PROVEEDOR
 /*==============================================================*/
 create table DETALLE_COMPRA (
    ID_DETALLE           INT                  not null,
-   CODIGO_BARRAS        VARCHAR(50)          not null,
    ID_COMPRA            INT4                 not null,
+   CODIGO_BARRAS        VARCHAR(50)          null,
    DET_COMP_CANTIDAD    DECIMAL(10,2)        not null
       constraint CKC_DET_COMP_CANTIDAD_DETALLE_ check (DET_COMP_CANTIDAD >= 0),
    PRECIO_UNITARIO      DECIMAL(10,2)        not null
@@ -267,6 +280,9 @@ create table DETALLE_COMPRA (
       constraint CKC_DET_COMP_MONTO_DETALLE_ check (DET_COMP_MONTO >= 0),
    constraint PK_DETALLE_COMPRA primary key (ID_DETALLE)
 );
+
+comment on table DETALLE_COMPRA is
+'detalles de las compras';
 
 /*==============================================================*/
 /* Index: DETALLE_COMPRA_PK                                     */
@@ -279,7 +295,7 @@ ID_DETALLE
 /* Index: RELATIONSHIP_14_FK                                    */
 /*==============================================================*/
 create  index RELATIONSHIP_14_FK on DETALLE_COMPRA (
-CODIGO_BARRAS
+
 );
 
 /*==============================================================*/
@@ -531,6 +547,19 @@ create  index RELATIONSHIP_20_FK on PRODUCTO (
 );
 
 /*==============================================================*/
+/* Table: PRODU_COD_PROV                                        */
+/*==============================================================*/
+create table PRODU_COD_PROV (
+   CODIGO_BARRAS_PROV   VARCHAR(50)          not null,
+   CODIGO_BARRAS        VARCHAR(50)          null,
+   constraint PK_PRODU_COD_PROV primary key (CODIGO_BARRAS_PROV)
+);
+
+comment on table PRODU_COD_PROV is
+'Codigos de barras de los proveedores, tabla usada para almacenar todos los codigos de barras que pueda tener un mismo producto, independientemente de su proveedor, por ejemplo un jabon de manos de protex, jonson y jonson, sigue siendo un jabon de manos y se guarda como tal
+';
+
+/*==============================================================*/
 /* Table: PROVEEDOR                                             */
 /*==============================================================*/
 create table PROVEEDOR (
@@ -657,7 +686,7 @@ alter table COMPRA
       on delete restrict on update restrict;
 
 alter table DETALLE_COMPRA
-   add constraint FK_DETALLE__RELATIONS_PRODUCTO foreign key (CODIGO_BARRAS)
+   add constraint FK_DETALLE__REFERENCE_PRODUCTO foreign key (CODIGO_BARRAS)
       references PRODUCTO (CODIGO_BARRAS)
       on delete restrict on update restrict;
 
@@ -719,6 +748,11 @@ alter table PREST_D_PRODUC
 alter table PRODUCTO
    add constraint FK_PRODUCTO_PROD_TIEN_CATEGORI foreign key (ID_CATEGORIA)
       references CATEGORIA_AREA (ID_CATEGORIA)
+      on delete restrict on update restrict;
+
+alter table PRODU_COD_PROV
+   add constraint FK_PRODU_CO_REFERENCE_PRODUCTO foreign key (CODIGO_BARRAS)
+      references PRODUCTO (CODIGO_BARRAS)
       on delete restrict on update restrict;
 
 alter table PROVEEDOR

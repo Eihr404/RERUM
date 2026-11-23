@@ -1,0 +1,13 @@
+RERUM/
+├── src/
+│   ├── Rerum.Domain          entidades y reglas (stock no negativo, baja en 7 días, préstamo 17:00)
+│   ├── Rerum.Application     casos de uso, una carpeta por módulo del alcance
+│   ├── Rerum.Infrastructure  EF Core/Npgsql, seguridad, importación Excel, respaldos
+│   ├── Rerum.Contracts       DTOs compartidos entre servidor y escritorio
+│   ├── Rerum.Server          API (login, sesión única, endpoints)
+│   └── Rerum.Desktop         WPF, con Modules/<Modulo>/{Views,ViewModels}
+├── tests/                    unitarias, aplicación e integración
+│                             (Concurrencia, Sesiones, Respaldos, Seguridad)
+├── database/                 migraciones, datos semilla, scripts de respaldo y restauración
+├── installer/                servidor y cliente
+└── docs/                     gestión, requisitos, diseño, pruebas, manuales, entrega
